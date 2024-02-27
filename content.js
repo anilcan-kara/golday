@@ -1,11 +1,5 @@
 'use strict';
 
-console.log(`location.href`, location.href);
-console.log(`location.pathname`, location.pathname);
-console.log(`chrome`, chrome);
-console.log(`chrome.extension`, chrome.extension);
-console.log(`chrome.runtime`, chrome.runtime);
-
 const script = document.createElement('script');
 script.setAttribute('type', 'module');
 script.setAttribute('src', chrome.runtime.getURL('main.js'));
@@ -23,4 +17,14 @@ if (location.pathname === '/ApplicationArea/CargoTrackingBranches') {
       document.querySelector('.kt-portlet__body').innerHTML = data;
     })
     .catch((err) => console.error(err));
+
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.type = 'text/css';
+  css.href = chrome.runtime.getURL('cargo.css');
+  head.appendChild(css);
+
+  const confetti = document.createElement('script');
+  confetti.setAttribute('src', chrome.runtime.getURL('confetti.min.js'));
+  head.insertBefore(confetti, head.lastChild);
 }

@@ -10,18 +10,13 @@ const guide = async () => {
       mail: $(e).attr('data-eposta'),
     }));
 
-  console.log(`departments`, departments);
-
   localStorage.setItem('departments', JSON.stringify(departments));
 
   const rehber = $('.kt-container.rehber');
 
   rehber.after('<button id="save">Save</button>');
 
-  $('#save').on('click', async function () {
-    const users = await fetchUsers();
-    console.log(`users`, users);
-  });
+  $('#save').on('click', fetchUsers());
 };
 
 export default guide;

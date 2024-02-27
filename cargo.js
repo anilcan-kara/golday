@@ -1,69 +1,109 @@
+import { getUsers } from './fetch.js';
+
 const cargo = () => {
+  document.title = 'Altin Gunu';
+
   const title = $('.kt-subheader__title');
   title.text('Altin Gunu');
 
   const btnNew = $('#CreateNewButton');
+  btnNew.hide();
   btnNew.html('<i class="fa fa-plus-square"></i>Katilimcilari Sec');
 
-  const th = (name) => `<th>${name}</th>`;
+  const search = $('#arama');
 
-  const table = $('#CargoBranchesTable');
-  table
-    .find('thead tr')
-    .html(
-      [
-        'Photo',
-        'Name',
-        'Department',
-        'Position',
-        'Unit',
-        'Branch',
-        'Status',
-        'Actions',
-      ]
-        .map(th)
-        .join('')
-    );
+  const store = {
+    users: getUsers(),
+    selectedUsers: [],
+    winners: [],
+  };
 
-  $(function () {
-    const users = [
-      { name: 'Anıl', photo: 'anil.jpg' },
-      { name: 'Kemal', photo: 'kemal.jpg' },
-    ];
+  window.store = store;
 
-    users.forEach((user) => {
-      $('#user-list').append(`<div class="user">
-              <img src="${user.photo}" alt="${user.name}">
-              <p>${user.name}</p>
-              <button class="select-user">Seç</button>
-          </div>`);
-    });
-
-    $('.select-user').on('click', function () {
-      const userDiv = $(this).parent();
-      $('#selected-users').append(userDiv.clone());
-    });
-
-    $('#draw-lot').on('click', function () {
-      const selectedUsers = $('#selected-users .user p')
-        .map(function () {
-          return $(this).text();
-        })
-        .get();
-
-      const scheduleDiv = $('#schedule');
-
-      let currentDate = new Date();
-      currentDate.setDate(15);
-
-      selectedUsers.forEach((name) => {
-        scheduleDiv.append(
-          `<p>${name}: ${currentDate.toLocaleDateString('tr-TR')}</p>`
-        );
-        currentDate.setMonth(currentDate.getMonth() + 1);
-      });
+  search.on('input', function () {
+    const value = $(this).val().toLowerCase();
+    $('#user-list .user').filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
+
+  const userJsx = (user) => `<div class="user" sicil="${user.sicil}">
+            <img class="photo" src="${user.photo}" alt="${user.name}">
+            <p class="title">${user.name}</p>
+        </div>`;
+
+  $('#user-list').html(store.users.map(userJsx));
+
+  $('#close').on('click', function () {
+    $('#user-list').toggle();
+  });
+
+  $('#user-list .user').on('click', function () {
+    const sicil = $(this).attr('sicil');
+    const user = store.users.find((user) => user.sicil === sicil);
+
+    if (!store.selectedUsers.includes(user.sicil)) {
+      store.selectedUsers.push(user);
+    }
+
+    $('#selected-users').html(store.selectedUsers.map(userJsx));
+  });
+
+  $('#selected-users').on('click', '.user', function () {
+    const sicil = $(this).attr('sicil');
+    const user = store.users.find((user) => user.sicil === sicil);
+
+    store.selectedUsers = store.selectedUsers.filter(
+      (u) => u.sicil !== user.sicil
+    );
+
+    $('#selected-users').html(store.selectedUsers.map(userJsx));
+  });
+
+  let confetti = new Confetti('draw-lot');
+
+  confetti.setCount(75);
+  confetti.setSize(1);
+  confetti.setPower(25);
+  confetti.setFade(false);
+  confetti.destroyTarget(false);
+
+  function draw() {
+    if (store.selectedUsers.length === 0) {
+      return alert('Katilimci seciniz');
+    }
+
+    const winner =
+      store.selectedUsers[
+        Math.floor(Math.random() * store.selectedUsers.length)
+      ];
+
+    if (store.winners.find((e) => e.sicil === winner.sicil)) {
+      return draw();
+    }
+
+    store.winners.push(winner);
+
+    store.selectedUsers = store.selectedUsers.filter(
+      (u) => u.sicil !== winner.sicil
+    );
+
+    $('#selected-users').html(store.selectedUsers.map(userJsx));
+
+    $('#schedule')
+      .html(`<div class="winner"><img src="${winner.photo}" /><h1>${winner.name}</h1>
+      <p>Unvani: ${winner.title}</p>
+      <p>Birim: ${winner.birim}</p>
+      <p>Dahili No: ${winner.dahilino}</p>
+      <p>Eposta: ${winner.eposta}</p>
+      <p>Sicil: ${winner.sicil}</p>
+      <p>Yer: ${winner.yer}</p>
+      </div>`);
+
+    $('#winners').html(store.winners.map(userJsx));
+  }
+
+  $('#draw-lot').on('click', draw);
 };
 
 export default cargo;
