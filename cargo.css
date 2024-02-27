@@ -1,6 +1,58 @@
-/* #user-list {
-  display: grid;
-} */
+button {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #f0f0f0;
+  backdrop-filter: brightness(1.25) contrast(1.25);
+}
+
+.block {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.search-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.search {
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+}
+
+.search-line button {
+  width: 120px;
+}
+
+.user-box {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.user-list {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+  background: #ddd;
+  border-radius: 10px;
+  backdrop-filter: brightness(1.25) contrast(1.25);
+}
 
 .user {
   display: inline-block;
@@ -16,14 +68,17 @@
   cursor: pointer;
 }
 
+.user:hover {
+  background: #f4f4f4;
+  backdrop-filter: brightness(1.25) contrast(1.25);
+}
+
 .user .photo {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  position: relative;
+  margin: 4px 0 6px;
   background-color: #f5f5f5;
   border: 1px solid #e5e5e5;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
@@ -37,9 +92,32 @@
   font-size: 16px;
 }
 
+.selected-users {
+  display: none;
+}
+
+.winners {
+  display: none;
+}
+
+#winners {
+  overflow: visible;
+  white-space: normal;
+}
+
+.winner {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 30px;
+}
+
 .winner img {
-  width: 264px;
-  height: 264px;
+  display: inline-block;
+  width: 200px;
+  height: 200px;
   overflow: hidden;
   margin: 0 auto;
   margin-bottom: 10px;
@@ -47,4 +125,12 @@
   background-color: #f5f5f5;
   border: 1px solid #e5e5e5;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.winner .details {
+  display: inline-block;
+}
+
+.winner .details p {
+  line-height: 9px;
 }

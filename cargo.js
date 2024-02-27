@@ -4,7 +4,7 @@ const cargo = () => {
   document.title = 'Altin Gunu';
 
   const title = $('.kt-subheader__title');
-  title.text('Altin Gunu');
+  title.after('<h1>Altın Günü Kurasi</h1>').hide();
 
   const btnNew = $('#CreateNewButton');
   btnNew.hide();
@@ -13,6 +13,7 @@ const cargo = () => {
   const search = $('#arama');
 
   const store = {
+    isUserListVisible: false,
     users: getUsers(),
     selectedUsers: [],
     winners: [],
@@ -22,6 +23,7 @@ const cargo = () => {
 
   search.on('input', function () {
     const value = $(this).val().toLowerCase();
+
     $('#user-list .user').filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
@@ -35,6 +37,14 @@ const cargo = () => {
   $('#user-list').html(store.users.map(userJsx));
 
   $('#close').on('click', function () {
+    store.isUserListVisible = !store.isUserListVisible;
+
+    if (store.isUserListVisible) {
+      $(this).text('Listeyi Goster');
+    } else {
+      $(this).text('Listeyi Kapat');
+    }
+
     $('#user-list').toggle();
   });
 
@@ -45,6 +55,7 @@ const cargo = () => {
     if (!store.selectedUsers.find((e) => e.sicil === user.sicil)) {
       store.selectedUsers.push(user);
       $('#selected-users').html(store.selectedUsers.map(userJsx));
+      $('.selected-users').show();
     }
   });
 
@@ -81,25 +92,39 @@ const cargo = () => {
       return draw();
     }
 
+    $('.search-line').hide();
+    $('#user-list').hide();
+
     store.winners.push(winner);
 
     store.selectedUsers = store.selectedUsers.filter(
       (u) => u.sicil !== winner.sicil
     );
 
-    $('#selected-users').html(store.selectedUsers.map(userJsx));
+    if (store.selectedUsers.length === 0) {
+      $('.selected-users').hide();
+    } else {
+      $('#selected-users').html(store.selectedUsers.map(userJsx));
+    }
 
-    $('#schedule')
-      .html(`<div class="winner"><img src="${winner.photo}" /><h1>${winner.name}</h1>
+    $('#winner').html(`<div class="winner">
+      <div>
+      <img src="${winner.photo}" />
+      </div>
+      <div class="details"}]}>
+      <h1>${winner.name}</h1>
       <p>Unvani: ${winner.title}</p>
       <p>Birim: ${winner.birim}</p>
       <p>Dahili No: ${winner.dahilino}</p>
       <p>Eposta: ${winner.eposta}</p>
       <p>Sicil: ${winner.sicil}</p>
       <p>Yer: ${winner.yer}</p>
+      </div>
       </div>`);
 
     $('#winners').html(store.winners.map(userJsx));
+
+    $('.winners').show();
   }
 
   $('#draw-lot').on('click', draw);

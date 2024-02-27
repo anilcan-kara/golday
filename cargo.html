@@ -1,11 +1,24 @@
-<h1>Altın Günü Kurasi</h1>
-<input type="text" name="Arama" id="arama" placeholder="Arama yap.." />
-<button id="close">Kapat</button>
-<div id="user-list"></div>
-<h2>Seçilen Katılımcılar</h2>
-<div id="selected-users"></div>
-<button id="draw-lot">Kurayı Çek</button>
-<h2>Secilen</h2>
-<div id="schedule"></div>
-<h2>Secilenler</h2>
-<div id="winners"></div>
+<div class="block search-line">
+  <input class="search" type="text" name="Arama" id="arama" placeholder="Arama yap.." />
+  <button id="close">Listeyi Kapat</button>
+</div>
+
+<div id="user-list" class="user-list"></div>
+
+<div class="block selected-users">
+  <h2>Seçilen Katılımcılar</h2>
+
+  <div class="user-box">
+    <div id="selected-users" class="user-list"></div>
+    <button id="draw-lot">Kurayı Çek</button>
+  </div>
+</div>
+
+<div class="block winner">
+  <div id="winner"></div>
+</div>
+
+<div class="block winners">
+  <h2>Secilenler</h2>
+  <div id="winners" class="user-list"></div>
+</div>
