@@ -42,11 +42,10 @@ const cargo = () => {
     const sicil = $(this).attr('sicil');
     const user = store.users.find((user) => user.sicil === sicil);
 
-    if (!store.selectedUsers.includes(user.sicil)) {
+    if (!store.selectedUsers.find((e) => e.sicil === user.sicil)) {
       store.selectedUsers.push(user);
+      $('#selected-users').html(store.selectedUsers.map(userJsx));
     }
-
-    $('#selected-users').html(store.selectedUsers.map(userJsx));
   });
 
   $('#selected-users').on('click', '.user', function () {
